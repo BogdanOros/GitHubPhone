@@ -2,4 +2,13 @@
     <string name="app_name">GitHubMobile</string>
     <string name="help_label">Enter the GitHub profile name</string>
     <string name="search_button">Search</string>
+
+    <string name="user_name">Username: </string>
+    <string name="email_text">Email: </string>
+    <string name="followers_text">Followers: </string>
+    <string name="following_text">Following: </string>
+    <string name="gist_text">Gists: </string>
+    <string name="repos_text">Repos: </string>
+
+    <string name="alternative">Not setted!</string>
 </resources>

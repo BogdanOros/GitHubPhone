@@ -1,5 +1,7 @@
 package com.example.talizorah.githubmobile.Model;
 
+import java.util.List;
+
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import rx.Observable;
@@ -14,5 +16,8 @@ public interface GithubApi {
 
     @GET("/users/{user}")
     User getUser(@Path("user") String user);
+
+    @GET("users/{user}/repos")
+    Observable<List<Repository>> repos(@Path("user") String user);
 
 }
