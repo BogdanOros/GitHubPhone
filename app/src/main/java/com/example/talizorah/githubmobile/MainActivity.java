@@ -49,7 +49,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        subscription.unsubscribe();
+        if(subscription != null)
+            subscription.unsubscribe();
         ButterKnife.unbind(this);
     }
 

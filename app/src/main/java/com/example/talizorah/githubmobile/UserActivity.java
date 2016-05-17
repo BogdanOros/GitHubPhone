@@ -4,11 +4,16 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.talizorah.githubmobile.Model.CustomRepoList;
 import com.example.talizorah.githubmobile.Model.User;
 
 import java.net.URL;
@@ -38,8 +43,9 @@ public class UserActivity extends AppCompatActivity{
     @Bind(R.id.repos) TextView repos;
     @Bind(R.id.user_name) TextView name;
     @Bind(R.id.email) TextView email;
+    @Bind(R.id.repos_list) RecyclerView repoView;
 
-    private CompositeSubscription subscriptions;
+    private CustomRepoList customRepoListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +53,20 @@ public class UserActivity extends AppCompatActivity{
         setContentView(R.layout.activity_user);
 
         ButterKnife.bind(this);
-        subscriptions = new CompositeSubscription();
         user = (User)getIntent().getExtras().get("user");
         setUpToolbar();
         setUpUserData();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -118,5 +134,10 @@ public class UserActivity extends AppCompatActivity{
                         imageView.setImageBitmap(bitmap);
                     }
                 });
+
+        customRepoListAdapter = new CustomRepoList(this, user.getRepositories());
+        repoView.setAdapter(customRepoListAdapter);
+        repoView.setLayoutManager(new LinearLayoutManager(this));
+
     }
 }
