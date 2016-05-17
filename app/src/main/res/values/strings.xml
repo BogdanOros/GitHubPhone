@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">GitHubMobile</string>
+    <string name="help_label">Enter the GitHub profile name</string>
+    <string name="search_button">Search</string>
+</resources>
