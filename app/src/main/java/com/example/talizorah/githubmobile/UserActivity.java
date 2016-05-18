@@ -1,31 +1,31 @@
 package com.example.talizorah.githubmobile;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.talizorah.githubmobile.Database.DatabaseHelper;
 import com.example.talizorah.githubmobile.Model.CustomRepoList;
 import com.example.talizorah.githubmobile.Model.User;
-
-import java.net.URL;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func0;
 import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by talizorah on 16.17.5.
@@ -33,7 +33,7 @@ import rx.subscriptions.CompositeSubscription;
 public class UserActivity extends AppCompatActivity{
 
     private User user;
-
+    private Activity mContext;
     @Bind(R.id.username) TextView usernameLabel;
     @Bind(R.id.my_toolbar) Toolbar toolbar;
     @Bind(R.id.img) ImageView imageView;
@@ -52,10 +52,18 @@ public class UserActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
+        mContext = this;
         ButterKnife.bind(this);
         user = (User)getIntent().getExtras().get("user");
         setUpToolbar();
         setUpUserData();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
     }
 
     @Override
@@ -65,8 +73,40 @@ public class UserActivity extends AppCompatActivity{
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case R.id.open_browser:
+                openInBrowser();
+                return true;
+            case R.id.save:
+                saveIntoDb();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void saveIntoDb(){
+        getUserSaveObservable()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<User>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(User user) {
+                        DatabaseHelper.getDatabaseHelper(mContext).add(user);
+                    }
+                });
+    }
+
+    public Observable<User> getUserSaveObservable(){
+        return Observable.just(user);
     }
 
     @Override
@@ -84,7 +124,7 @@ public class UserActivity extends AppCompatActivity{
     }
 
 
-    private void setUpUserData(){
+    private void setUpUserData() {
 
         String content = getString(R.string.alternative);
         name.append(user.getName() != null ?
@@ -104,5 +144,10 @@ public class UserActivity extends AppCompatActivity{
         imageView.setImageBitmap(user.getLoadedBitmap().getCurrentImage());
         repoView.setAdapter(customRepoListAdapter);
         repoView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void openInBrowser(){
+        Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(user.getUrl()));
+        startActivity(intent);
     }
 }

@@ -11,4 +11,8 @@
     <string name="repos_text">Repos: </string>
 
     <string name="alternative">Not setted!</string>
+
+    //Settings
+    <string name="browser">Open in browser</string>
+    <string name="save">Save</string>
 </resources>

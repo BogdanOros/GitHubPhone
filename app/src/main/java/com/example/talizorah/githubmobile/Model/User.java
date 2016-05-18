@@ -17,10 +17,15 @@ public class User implements Serializable{
     private String avatar_url;
     private String public_repos;
     private String public_gists;
+    private String html_url;
     private BitmapDataObject loadedBitmap;
 
     public BitmapDataObject getLoadedBitmap() {
         return loadedBitmap;
+    }
+
+    public String getUrl() {
+        return html_url;
     }
 
     public void setLoadedBitmap(BitmapDataObject loadedBitmap) {
@@ -67,5 +72,41 @@ public class User implements Serializable{
 
     public String getName() {
         return name;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setFollowers(String followers) {
+        this.followers = followers;
+    }
+
+    public void setFollowing(String following) {
+        this.following = following;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAvatar_url(String avatar_url) {
+        this.avatar_url = avatar_url;
+    }
+
+    public void setPublic_repos(String public_repos) {
+        this.public_repos = public_repos;
+    }
+
+    public void setPublic_gists(String public_gists) {
+        this.public_gists = public_gists;
+    }
+
+    public void setHtml_url(String html_url) {
+        this.html_url = html_url;
     }
 }

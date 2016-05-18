@@ -26,4 +26,20 @@ public class Repository implements Serializable {
     public String getStargazers_count() {
         return stargazers_count;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public void setForks_count(String forks_count) {
+        this.forks_count = forks_count;
+    }
+
+    public void setStargazers_count(String stargazers_count) {
+        this.stargazers_count = stargazers_count;
+    }
 }
