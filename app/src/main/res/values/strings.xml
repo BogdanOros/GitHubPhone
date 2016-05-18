@@ -12,7 +12,26 @@
 
     <string name="alternative">Not setted!</string>
 
+    //Search Act
+    <string name="no_internet_tittle">Connection Problem</string>
+    <string name="no_internet_message">No internet connection found!</string>
+    <string name="no_internet_ok">Try again!</string>
+    <string name="no_internet_cancel">Cancel</string>
+
+    <string name="no_user_tittle">Problem</string>
+    <string name="no_user_message">Such user not found!</string>
+    <string name="no_user_ok">Try again</string>
+
+    <string name="db_tittle">Notice</string>
+    <string name="db_message">We found this user in database!</string>
+    <string name="db_download">Update!</string>
+    <string name="db_open">Open!</string>
+
+
     //Settings
     <string name="browser">Open in browser</string>
     <string name="save">Save</string>
+    <string name="show_repo">Show saved</string>
+
+    <string name="saved_users">Saved users</string>
 </resources>

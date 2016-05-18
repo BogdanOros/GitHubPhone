@@ -8,7 +8,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.ContactsContract;
 
 import com.example.talizorah.githubmobile.Model.Repository;
+import com.example.talizorah.githubmobile.Model.SavedUserEntity;
 import com.example.talizorah.githubmobile.Model.User;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by talizorah on 16.18.5.
@@ -53,6 +61,7 @@ public class DatabaseHelper {
                     DataProvider.USER_EMAIL + " text, " +
                     DataProvider.USER_GISTS + " text, " +
                     DataProvider.HTML_URL + " text, " +
+                    DataProvider.TIME + " text, " +
                     DataProvider.USER_IMAGE + " BLOB,  " +
                     DataProvider.USER_FOLLOWING + " text )");
         }
@@ -84,12 +93,38 @@ public class DatabaseHelper {
         Cursor cur = db.rawQuery(query, null);
         return cur;
     }
+
+    public List<SavedUserEntity> getUsers(){
+        SQLiteDatabase db = sqLiteOpenHelper.getReadableDatabase();
+        if(db == null)
+            return null;
+        String query = "select * from " + DataProvider.USER_TABLE;
+        Cursor cur = db.rawQuery(query, null);
+        List<SavedUserEntity> list = new ArrayList<>();
+        try {
+            while(cur.moveToNext()){
+                SavedUserEntity userEntity = new SavedUserEntity();
+                userEntity.login = cur.getString(cur.getColumnIndex(DataProvider.USER_LOGIN));
+                userEntity.time = cur.getString(cur.getColumnIndex(DataProvider.TIME));
+                list.add(userEntity);
+            }
+        }
+        finally {
+            cur.close();
+        }
+        return list;
+    }
+
     public int add(User user) {
         SQLiteDatabase db = sqLiteOpenHelper.getWritableDatabase();
         if (db == null) {
             return 0;
         }
         ContentValues row = new ContentValues();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String currentDateAndTime = sdf.format(new Date());
+        row.put(DataProvider.TIME, currentDateAndTime);
         row.put(DataProvider.USER_LOGIN, user.getLogin());
         row.put(DataProvider.USER_FOLLOWERS, user.getFollowers());
         row.put(DataProvider.USER_REPOS, user.getPublic_repos());

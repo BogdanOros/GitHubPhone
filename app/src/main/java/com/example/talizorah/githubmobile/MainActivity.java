@@ -9,6 +9,8 @@ import android.graphics.BitmapFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.example.talizorah.githubmobile.Database.DataProvider;
@@ -19,7 +21,9 @@ import com.example.talizorah.githubmobile.Model.ConnectionChecker;
 import com.example.talizorah.githubmobile.Model.GithubApi;
 import com.example.talizorah.githubmobile.Model.GithubService;
 import com.example.talizorah.githubmobile.Model.Repository;
+import com.example.talizorah.githubmobile.Model.SavedUserEntity;
 import com.example.talizorah.githubmobile.Model.User;
+import com.example.talizorah.githubmobile.Model.UserHandler;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -33,6 +37,7 @@ import rx.Observer;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func0;
 import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
@@ -41,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private GithubApi githubService;
     private Subscription subscription;
     private Activity mActivity;
+    private UserHandler userHandler;
 
     @Bind(R.id.editText)
     EditText username;
@@ -50,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mActivity = this;
+        userHandler = new UserHandler(this);
         githubService = GithubService.createGithubService();
         ButterKnife.bind(this);
     }
@@ -67,14 +74,38 @@ public class MainActivity extends AppCompatActivity {
         searchWithConnectionCheck();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case R.id.saved_users:
+                openSavedUsers();
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void openSavedUsers(){
+        Intent intent = new Intent(this, SavedUsersActivity.class);
+        startActivity(intent);
+    }
 
     private Observable<User> getDatabaseAccessObservable(Cursor cursor){
-        return Observable.just(getUserFromDatabase(cursor));
+        return Observable.just(userHandler.getUserFromDatabase(cursor));
     }
 
     private Cursor checkSavedUser(){
         return DatabaseHelper.getDatabaseHelper(this).getUserWithLogin(username.getText().toString());
     }
+
 
     private void searchWithConnectionCheck(){
         if(ConnectionChecker.isNetworkAvailable(this)){
@@ -143,16 +174,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void noConnectionDialog(){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Tittle");
-        alert.setMessage("message");
-        alert.setPositiveButton("Again", new DialogInterface.OnClickListener() {
+        alert.setTitle(R.string.no_internet_tittle);
+        alert.setMessage(R.string.no_internet_message);
+        alert.setPositiveButton(R.string.no_internet_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
                 searchWithConnectionCheck();
             }
         });
-        alert.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(R.string.no_internet_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -163,9 +194,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void noUserFindDialog(){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Tittle");
-        alert.setMessage("no user");
-        alert.setPositiveButton("Again", new DialogInterface.OnClickListener() {
+        alert.setTitle(R.string.no_user_tittle);
+        alert.setMessage(R.string.no_user_message);
+        alert.setPositiveButton(R.string.no_user_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -176,16 +207,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void userDatabaseDialog(final Cursor cursor){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Tittle");
-        alert.setMessage("no user");
-        alert.setPositiveButton("Download", new DialogInterface.OnClickListener() {
+        alert.setTitle(R.string.db_tittle);
+        alert.setMessage(R.string.db_message);
+        alert.setPositiveButton(R.string.db_download, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
                 downloadUserData();
             }
         });
-        alert.setNegativeButton("Use saved info", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(R.string.db_open, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 getDatabaseAccessObservable(cursor)
@@ -214,45 +245,4 @@ public class MainActivity extends AppCompatActivity {
         });
         alert.show();
     }
-
-
-    private User getUserFromDatabase(Cursor cursor){
-        User user = new User();
-        try {
-            while (cursor.moveToNext()) {
-                int id = cursor.getInt(cursor.getColumnIndex(DataProvider.USER_ID));
-                user.setName(cursor.getString(cursor.getColumnIndex(DataProvider.USER_NAME)));
-                user.setLogin(cursor.getString(cursor.getColumnIndex(DataProvider.USER_LOGIN)));
-                user.setEmail(cursor.getString(cursor.getColumnIndex(DataProvider.USER_EMAIL)));
-                user.setPublic_repos(cursor.getString(cursor.getColumnIndex(DataProvider.USER_REPOS)));
-                user.setPublic_gists(cursor.getString(cursor.getColumnIndex(DataProvider.USER_GISTS)));
-                user.setFollowers(cursor.getString(cursor.getColumnIndex(DataProvider.USER_FOLLOWERS)));
-                user.setFollowing(cursor.getString(cursor.getColumnIndex(DataProvider.USER_FOLLOWING)));
-                user.setHtml_url(cursor.getString(cursor.getColumnIndex(DataProvider.HTML_URL)));
-                user.setLoadedBitmap(new BitmapDataObject(
-                        DbBitmapUtility.getImage(cursor.getBlob(cursor.getColumnIndex(DataProvider.USER_IMAGE)))));
-                List<Repository> list = new ArrayList<>();
-                Cursor reposCursor = DatabaseHelper.getDatabaseHelper(this).getRepos(id);
-                try{
-                    while(reposCursor.moveToNext()){
-                        Repository repository = new Repository();
-                        repository.setName(reposCursor.getString(2));
-                        repository.setLanguage(reposCursor.getString(3));
-                        repository.setForks_count(reposCursor.getString(4));
-                        repository.setStargazers_count(reposCursor.getString(5));
-                        list.add(repository);
-                    }
-                }
-                finally {
-                    reposCursor.close();
-                }
-
-                user.setRepositories(list);
-            }
-        } finally {
-            cursor.close();
-        }
-        return  user;
-    }
-
 }

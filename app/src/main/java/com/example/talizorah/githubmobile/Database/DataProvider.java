@@ -6,7 +6,7 @@ package com.example.talizorah.githubmobile.Database;
 public class DataProvider {
     // User table
     public static String TABLE = "gitDb";
-    public static int DB_USER_VERSION = 5;
+    public static int DB_USER_VERSION = 7;
     public static String USER_TABLE = "userTb";
     public static String USER_ID = "id";
     public static String USER_LOGIN = "login";
@@ -18,6 +18,7 @@ public class DataProvider {
     public static String USER_GISTS = "gists";
     public static String HTML_URL = "url";
     public static String USER_IMAGE = "image";
+    public static String TIME = "time";
 
     // Repos table
     public static String REPO_TABLE = "repoTb";

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="help_label">Введите название профиля ГитХаб</string>
+    <string name="search_button">Поиск</string>
+
+    <string name="user_name">Имя: </string>
+    <string name="email_text">Почта: </string>
+    <string name="followers_text">Подписчики: </string>
+    <string name="following_text">Подписан: </string>
+    <string name="gist_text">Логи: </string>
+    <string name="repos_text">Репозитории: </string>
+
+    <string name="alternative">Не установлено!</string>
+
+    //Search Act
+    <string name="no_internet_tittle">Ошибка сети</string>
+    <string name="no_internet_message">Нет подключения к интернету</string>
+    <string name="no_internet_ok">Повторить</string>
+    <string name="no_internet_cancel">Отмена</string>
+
+    <string name="no_user_tittle">Ошибка поиска</string>
+    <string name="no_user_message">Пользователь с таким именем не найден!</string>
+    <string name="no_user_ok">Повторить</string>
+
+    <string name="db_tittle">Предупреждение</string>
+    <string name="db_message">Мы нашли этого пользователя в базе данных!</string>
+    <string name="db_download">Обновить!</string>
+    <string name="db_open">Открыть!</string>
+
+    <string name="saved_users">Сохраненные</string>
+
+    //Settings
+    <string name="browser">Открыть в браузере</string>
+    <string name="save">Сохранить</string>
+    <string name="show_repo">Сохраненные</string>
+</resources>

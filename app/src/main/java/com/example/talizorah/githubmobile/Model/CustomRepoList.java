@@ -21,12 +21,10 @@ import butterknife.ButterKnife;
  */
 public class CustomRepoList extends RecyclerView.Adapter<CustomRepoList.RepoViewHolder> {
 
-    private Context context;
     private LayoutInflater inflater;
     private List<Repository> repositories;
 
     public CustomRepoList(Context context, List<Repository> repositoryList){
-        this.context = context;
         inflater = LayoutInflater.from(context);
         this.repositories = repositoryList;
     }
