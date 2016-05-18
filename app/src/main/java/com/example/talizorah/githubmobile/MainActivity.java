@@ -3,18 +3,22 @@ package com.example.talizorah.githubmobile;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.MainThread;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.EditText;
 
+import com.example.talizorah.githubmobile.Model.BitmapDataObject;
 import com.example.talizorah.githubmobile.Model.ConnectionChecker;
 import com.example.talizorah.githubmobile.Model.GithubApi;
 import com.example.talizorah.githubmobile.Model.GithubService;
 import com.example.talizorah.githubmobile.Model.Repository;
 import com.example.talizorah.githubmobile.Model.User;
 
+import java.net.URL;
 import java.util.List;
 
 import butterknife.Bind;
@@ -24,7 +28,9 @@ import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func2;
+import rx.functions.Func3;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -76,6 +82,14 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public User call(User user, List<Repository> repositories) {
                         user.setRepositories(repositories);
+                        try {
+                            BitmapDataObject dataObject =
+                                    new BitmapDataObject(getBitmap(user.getAvatar_url()));
+                            user.setLoadedBitmap(dataObject);
+                        }
+                        catch (Exception ex){
+                            ex.printStackTrace();
+                        }
                         return user;
                     }
                 })
@@ -83,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<User>() {
                     Intent intent;
+
                     @Override
                     public void onCompleted() {
                         startActivity(intent);
@@ -99,6 +114,12 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("user", user);
                     }
                 });
+    }
+
+    private Bitmap getBitmap(String urlStr) throws Exception{
+        URL url = new URL(urlStr);
+        Bitmap map =  BitmapFactory.decodeStream(url.openConnection().getInputStream());
+        return map;
     }
 
     private void noConnectionDialog(){

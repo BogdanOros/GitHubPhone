@@ -55,18 +55,14 @@ public class CustomRepoList extends RecyclerView.Adapter<CustomRepoList.RepoView
 
     class RepoViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView name;
-        private TextView lang;
-        private TextView forks;
-        private TextView stars;
+        @Bind(R.id.repo_name) TextView name;
+        @Bind(R.id.repo_language)TextView lang;
+        @Bind(R.id.forks_count) TextView forks;
+        @Bind(R.id.stars_count) TextView stars;
 
         public RepoViewHolder(View itemView) {
             super(itemView);
-            name = (TextView)itemView.findViewById(R.id.repo_name);
-            lang = (TextView)itemView.findViewById(R.id.repo_language);
-            forks = (TextView)itemView.findViewById(R.id.forks_count);
-            stars = (TextView)itemView.findViewById(R.id.stars_count);
-            ButterKnife.bind((Activity)itemView.getContext());
+            ButterKnife.bind(this, itemView);
         }
 
         public TextView getName() {

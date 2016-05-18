@@ -72,6 +72,7 @@ public class UserActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        user = null;
         ButterKnife.unbind(this);
     }
 
@@ -83,61 +84,25 @@ public class UserActivity extends AppCompatActivity{
     }
 
 
-    private Bitmap getBitmap(String urlStr) throws Exception{
-        URL url = new URL(urlStr);
-        return BitmapFactory.decodeStream(url.openConnection().getInputStream());
-    }
-
-    public Observable<Bitmap> getBitmapObservable(final String url){
-        return Observable.defer(new Func0<Observable<Bitmap>>() {
-            @Override
-            public Observable<Bitmap> call() {
-                try {
-                    return Observable.just(getBitmap(url));
-                } catch (Exception ex) {
-                    return null;
-                }
-            }
-        });
-    }
-
     private void setUpUserData(){
-        getBitmapObservable(user.getAvatar_url())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Bitmap>() {
-                    @Override
-                    public void onCompleted() {
-                        String content = getString(R.string.alternative);
 
-                        name.append(user.getName() != null ?
-                                user.getName() : content);
-                        email.append(user.getEmail() != null ?
-                                user.getEmail() : content);
-                        followers.append(user.getFollowers() != null ?
-                                user.getFollowers() : content);
-                        following.append(user.getFollowing() != null ?
-                                user.getFollowing() : content);
-                        gists.append(user.getPublic_gists() != null ?
-                                user.getPublic_gists() : content);
-                        repos.append(user.getPublic_repos() != null ?
-                                user.getPublic_repos() : content);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(Bitmap bitmap) {
-                        imageView.setImageBitmap(bitmap);
-                    }
-                });
-
+        String content = getString(R.string.alternative);
+        name.append(user.getName() != null ?
+                user.getName() : content);
+        email.append(user.getEmail() != null ?
+                user.getEmail() : content);
+        followers.append(user.getFollowers() != null ?
+                user.getFollowers() : content);
+        following.append(user.getFollowing() != null ?
+                user.getFollowing() : content);
+        gists.append(user.getPublic_gists() != null ?
+                user.getPublic_gists() : content);
+        repos.append(user.getPublic_repos() != null ?
+                user.getPublic_repos() : content);
         customRepoListAdapter = new CustomRepoList(this, user.getRepositories());
+
+        imageView.setImageBitmap(user.getLoadedBitmap().getCurrentImage());
         repoView.setAdapter(customRepoListAdapter);
         repoView.setLayoutManager(new LinearLayoutManager(this));
-
     }
 }

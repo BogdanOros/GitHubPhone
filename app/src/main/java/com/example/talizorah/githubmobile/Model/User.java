@@ -1,5 +1,7 @@
 package com.example.talizorah.githubmobile.Model;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -15,6 +17,15 @@ public class User implements Serializable{
     private String avatar_url;
     private String public_repos;
     private String public_gists;
+    private BitmapDataObject loadedBitmap;
+
+    public BitmapDataObject getLoadedBitmap() {
+        return loadedBitmap;
+    }
+
+    public void setLoadedBitmap(BitmapDataObject loadedBitmap) {
+        this.loadedBitmap = loadedBitmap;
+    }
 
     private List<Repository> repositories;
 
