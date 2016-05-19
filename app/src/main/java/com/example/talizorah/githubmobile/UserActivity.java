@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.talizorah.githubmobile.Database.DatabaseHelper;
 import com.example.talizorah.githubmobile.Model.CustomRepoList;
@@ -23,6 +24,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -45,6 +47,7 @@ public class UserActivity extends AppCompatActivity{
     @Bind(R.id.repos_list) RecyclerView repoView;
 
     private CustomRepoList customRepoListAdapter;
+    private Subscription subscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,8 @@ public class UserActivity extends AppCompatActivity{
         setUpToolbar();
         setUpUserData();
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,13 +88,13 @@ public class UserActivity extends AppCompatActivity{
     }
 
     private void saveIntoDb(){
-        getUserSaveObservable()
+        subscription = getUserSaveObservable()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<User>() {
                     @Override
                     public void onCompleted() {
-
+                        Toast.makeText(mContext, R.string.user_save, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -112,7 +117,11 @@ public class UserActivity extends AppCompatActivity{
     protected void onDestroy() {
         super.onDestroy();
         user = null;
+        customRepoListAdapter = null;
         ButterKnife.unbind(this);
+        if(subscription != null){
+            subscription.unsubscribe();
+        }
     }
 
     private void setUpToolbar(){

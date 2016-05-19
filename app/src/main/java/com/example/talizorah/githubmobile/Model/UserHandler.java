@@ -7,7 +7,6 @@ import com.example.talizorah.githubmobile.Database.DataProvider;
 import com.example.talizorah.githubmobile.Database.DatabaseHelper;
 import com.example.talizorah.githubmobile.Database.DbBitmapUtility;
 
-import java.security.AccessControlContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +34,10 @@ public class UserHandler {
                 user.setHtml_url(cursor.getString(cursor.getColumnIndex(DataProvider.HTML_URL)));
                 user.setLoadedBitmap(new BitmapDataObject(
                         DbBitmapUtility.getImage(cursor.getBlob(cursor.getColumnIndex(DataProvider.USER_IMAGE)))));
+
                 List<Repository> list = new ArrayList<>();
                 Cursor reposCursor = DatabaseHelper.getDatabaseHelper(activity).getRepos(id);
+
                 try{
                     while(reposCursor.moveToNext()){
                         Repository repository = new Repository();
@@ -52,10 +53,12 @@ public class UserHandler {
                 }
 
                 user.setRepositories(list);
+
             }
         } finally {
             cursor.close();
         }
+
         return  user;
     }
 }

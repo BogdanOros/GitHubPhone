@@ -28,7 +28,7 @@
     <string name="db_open">Открыть!</string>
 
     <string name="saved_users">Сохраненные</string>
-
+    <string name="user_save">User saved!</string>
     //Settings
     <string name="browser">Открыть в браузере</string>
     <string name="save">Сохранить</string>

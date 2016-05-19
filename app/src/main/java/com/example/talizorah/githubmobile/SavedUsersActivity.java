@@ -45,5 +45,6 @@ public class SavedUsersActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+        customUserAdapter = null;
     }
 }

@@ -27,6 +27,7 @@
     <string name="db_download">Update!</string>
     <string name="db_open">Open!</string>
 
+    <string name="user_save">User saved!</string>
 
     //Settings
     <string name="browser">Open in browser</string>

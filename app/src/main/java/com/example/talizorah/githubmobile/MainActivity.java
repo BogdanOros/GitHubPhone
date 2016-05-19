@@ -11,22 +11,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
-import com.example.talizorah.githubmobile.Database.DataProvider;
 import com.example.talizorah.githubmobile.Database.DatabaseHelper;
-import com.example.talizorah.githubmobile.Database.DbBitmapUtility;
 import com.example.talizorah.githubmobile.Model.BitmapDataObject;
 import com.example.talizorah.githubmobile.Model.ConnectionChecker;
 import com.example.talizorah.githubmobile.Model.GithubApi;
 import com.example.talizorah.githubmobile.Model.GithubService;
 import com.example.talizorah.githubmobile.Model.Repository;
-import com.example.talizorah.githubmobile.Model.SavedUserEntity;
 import com.example.talizorah.githubmobile.Model.User;
 import com.example.talizorah.githubmobile.Model.UserHandler;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -37,7 +35,6 @@ import rx.Observer;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func0;
 import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
@@ -51,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.editText)
     EditText username;
 
+    @Bind(R.id.loading_bar)ProgressBar bar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         userHandler = new UserHandler(this);
         githubService = GithubService.createGithubService();
         ButterKnife.bind(this);
+        bar.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void downloadUserData() {
+        bar.setVisibility(View.VISIBLE);
         subscription = Observable.combineLatest(githubService.user(username.getText().toString()),
                 githubService.repos(username.getText().toString()), new Func2<User, List<Repository>, User>()
                 {
@@ -150,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onCompleted() {
+                        bar.setVisibility(View.GONE);
                         startActivity(intent);
                     }
 
@@ -168,12 +171,11 @@ public class MainActivity extends AppCompatActivity {
 
     private Bitmap getBitmap(String urlStr) throws Exception{
         URL url = new URL(urlStr);
-        Bitmap map =  BitmapFactory.decodeStream(url.openConnection().getInputStream());
-        return map;
+        return BitmapFactory.decodeStream(url.openConnection().getInputStream());
     }
 
     private void noConnectionDialog(){
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this, R.style.allert);
         alert.setTitle(R.string.no_internet_tittle);
         alert.setMessage(R.string.no_internet_message);
         alert.setPositiveButton(R.string.no_internet_ok, new DialogInterface.OnClickListener() {
@@ -193,12 +195,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void noUserFindDialog(){
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this, R.style.allert);
         alert.setTitle(R.string.no_user_tittle);
         alert.setMessage(R.string.no_user_message);
         alert.setPositiveButton(R.string.no_user_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                bar.setVisibility(View.GONE);
                 dialog.cancel();
             }
         });
@@ -206,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void userDatabaseDialog(final Cursor cursor){
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this, R.style.allert);
         alert.setTitle(R.string.db_tittle);
         alert.setMessage(R.string.db_message);
         alert.setPositiveButton(R.string.db_download, new DialogInterface.OnClickListener() {

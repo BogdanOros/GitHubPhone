@@ -14,8 +14,6 @@ public interface GithubApi {
     @GET("/users/{user}")
     Observable<User> user(@Path("user") String user);
 
-    @GET("/users/{user}")
-    User getUser(@Path("user") String user);
 
     @GET("users/{user}/repos")
     Observable<List<Repository>> repos(@Path("user") String user);

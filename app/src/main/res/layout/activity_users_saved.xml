@@ -4,6 +4,7 @@
     android:padding="@dimen/activity_vertical_margin"
     android:divider="?android:dividerHorizontal"
     android:showDividers="middle"
+
     android:layout_height="match_parent">
 
     <TextView
@@ -11,11 +12,13 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/saved_users"
+        android:layout_marginBottom="20dp"
         android:id="@+id/users_label" />
 
     <android.support.v7.widget.RecyclerView
         android:layout_height="match_parent"
         android:layout_width="match_parent"
+        style="@style/list"
         android:id="@+id/users_list">
     </android.support.v7.widget.RecyclerView>
 
