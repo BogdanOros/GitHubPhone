@@ -1,17 +1,19 @@
 package com.example.talizorah.githubmobile;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 import com.example.talizorah.githubmobile.Database.DatabaseHelper;
 import com.example.talizorah.githubmobile.Model.CustomRepoList;
 import com.example.talizorah.githubmobile.Model.User;
+import com.google.android.gms.plus.PlusShare;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -82,6 +85,9 @@ public class UserActivity extends AppCompatActivity{
                 return true;
             case R.id.save:
                 saveIntoDb();
+                return true;
+            case R.id.share:
+                publishDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -158,4 +164,39 @@ public class UserActivity extends AppCompatActivity{
         Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(user.getUrl()));
         startActivity(intent);
     }
+
+    public void googleplusPublish(String text, String link) {
+        Intent shareIntent = new PlusShare.Builder(this)
+                .setType("text/plain")
+                .setText(text)
+                .setContentUrl(Uri.parse(link))
+                .getIntent();
+        startActivityForResult(shareIntent, 1001);
+    }
+
+    private void publishDialog(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this, R.style.allert);
+        alert.setTitle(R.string.share_tittle);
+        alert.setMessage(R.string.share_message);
+
+        final EditText shareBox = new EditText(this);
+        shareBox.setHint(R.string.share_hint);
+        alert.setView(shareBox);
+
+        alert.setPositiveButton(R.string.share_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                googleplusPublish(shareBox.getText().toString(), user.getUrl());
+            }
+        });
+        alert.setNegativeButton(R.string.share_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alert.show();
+    }
+
 }

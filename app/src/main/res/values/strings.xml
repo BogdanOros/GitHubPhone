@@ -34,7 +34,14 @@
     //Settings
     <string name="browser">Open in browser</string>
     <string name="save">Save</string>
+    <string name="share">Share</string>
     <string name="show_repo">Show saved</string>
+
+    <string name="share_tittle">Google Plus</string>
+    <string name="share_message">Type your message</string>
+    <string name="share_hint">Message</string>
+    <string name="share_ok">Share</string>
+    <string name="share_cancel">Cancel</string>
 
     <string name="saved_users">Saved users</string>
 </resources>

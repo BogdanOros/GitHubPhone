@@ -35,5 +35,13 @@
     //Settings
     <string name="browser">Открыть в браузере</string>
     <string name="save">Сохранить</string>
+    <string name="share">Поделиться</string>
     <string name="show_repo">Сохраненные</string>
+
+    <string name="share_tittle">Google Plus</string>
+    <string name="share_message">Введите ваш комментарий</string>
+    <string name="share_hint">Текст комментария</string>
+    <string name="share_ok">Поделиться</string>
+    <string name="share_cancel">Назад</string>
+
 </resources>
