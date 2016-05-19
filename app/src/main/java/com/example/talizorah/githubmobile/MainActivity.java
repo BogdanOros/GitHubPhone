@@ -178,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
+                        bar.setVisibility(View.INVISIBLE);
                         noUserFindDialog();
                     }
 
@@ -221,7 +222,6 @@ public class MainActivity extends AppCompatActivity {
         alert.setPositiveButton(R.string.no_user_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                bar.setVisibility(View.INVISIBLE);
                 dialog.cancel();
             }
         });

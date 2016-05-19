@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.talizorah.githubmobile.Database.DatabaseHelper;
+import com.example.talizorah.githubmobile.Model.ConnectionChecker;
 import com.example.talizorah.githubmobile.Model.CustomRepoList;
 import com.example.talizorah.githubmobile.Model.User;
 import com.google.android.gms.plus.PlusShare;
@@ -84,7 +85,12 @@ public class UserActivity extends AppCompatActivity{
                 openInBrowser();
                 return true;
             case R.id.save:
-                saveIntoDb();
+                if(ConnectionChecker.isNetworkAvailable(this)){
+                    saveIntoDb();
+                } else {
+                    Toast.makeText(mContext, R.string.saving_alert, Toast.LENGTH_SHORT).show();
+                }
+
                 return true;
             case R.id.share:
                 publishDialog();

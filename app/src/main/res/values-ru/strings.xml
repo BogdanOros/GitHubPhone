@@ -11,7 +11,7 @@
     <string name="gist_text">Логи: </string>
     <string name="repos_text">Репозитории: </string>
 
-    <string name="alternative">Не установлено!</string>
+    <string name="alternative">Не установлено</string>
 
     //Search Act
     <string name="no_internet_tittle">Ошибка сети</string>
@@ -20,13 +20,13 @@
     <string name="no_internet_cancel">Отмена</string>
 
     <string name="no_user_tittle">Ошибка поиска</string>
-    <string name="no_user_message">Пользователь с таким именем не найден!</string>
+    <string name="no_user_message">Пользователь с таким именем не найден</string>
     <string name="no_user_ok">Повторить</string>
 
     <string name="db_tittle">Предупреждение</string>
-    <string name="db_message">Мы нашли этого пользователя в базе данных!</string>
-    <string name="db_download">Обновить!</string>
-    <string name="db_open">Открыть!</string>
+    <string name="db_message">Мы нашли этого пользователя в базе данных</string>
+    <string name="db_download">Обновить</string>
+    <string name="db_open">Открыть</string>
 
     <string name="saved_users">Сохраненные</string>
     <string name="user_save">Пользователь сохранен!</string>
@@ -43,5 +43,7 @@
     <string name="share_hint">Текст комментария</string>
     <string name="share_ok">Поделиться</string>
     <string name="share_cancel">Назад</string>
+
+    <string name="saving_alert">Операция недоступна без сети</string>
 
 </resources>

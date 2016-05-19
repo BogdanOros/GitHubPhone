@@ -10,24 +10,24 @@
     <string name="gist_text">Gists: </string>
     <string name="repos_text">Repos: </string>
 
-    <string name="alternative">Not setted!</string>
+    <string name="alternative">Not setted</string>
 
     //Search Act
     <string name="no_internet_tittle">Connection Problem</string>
-    <string name="no_internet_message">No internet connection found!</string>
+    <string name="no_internet_message">No internet connection found</string>
     <string name="no_internet_ok">Try again!</string>
     <string name="no_internet_cancel">Cancel</string>
 
     <string name="no_user_tittle">Problem</string>
     <string name="no_user_message">Such user not found!</string>
-    <string name="no_user_ok">Try again</string>
+    <string name="no_user_ok">Close</string>
 
     <string name="db_tittle">Notice</string>
-    <string name="db_message">We found this user in database!</string>
-    <string name="db_download">Update!</string>
-    <string name="db_open">Open!</string>
+    <string name="db_message">We found this user in database</string>
+    <string name="db_download">Update</string>
+    <string name="db_open">Open</string>
 
-    <string name="user_save">User saved!</string>
+    <string name="user_save">User saved</string>
     <string name="edit_hint">Username</string>
     <string name="repos_list_label">Repositories list</string>
 
@@ -42,6 +42,8 @@
     <string name="share_hint">Message</string>
     <string name="share_ok">Share</string>
     <string name="share_cancel">Cancel</string>
+
+    <string name="saving_alert">Cannot save without connection</string>
 
     <string name="saved_users">Saved users</string>
 </resources>
