@@ -22,11 +22,14 @@ import java.util.Locale;
  * Created by talizorah on 16.18.5.
  */
 public class DatabaseHelper {
+
     private SQLiteOpenHelper sqLiteOpenHelper;
     private static DatabaseHelper databaseHelper;
+
     private DatabaseHelper(Context context){
         sqLiteOpenHelper = new UserDataOpenHelper(context);
     }
+
     public static DatabaseHelper getDatabaseHelper(Context context){
         if(databaseHelper == null)
             databaseHelper = new DatabaseHelper(context);
@@ -41,7 +44,6 @@ public class DatabaseHelper {
         @Override
         public void onCreate(SQLiteDatabase db) {
             // have no calculations, so only text fields
-
             db.execSQL("Create table " + DataProvider.REPO_TABLE + " (" +
                     DataProvider.REPO_ID + " integer primary key autoincrement, " +
                             DataProvider.REPO_USER + " integer, " +
@@ -74,6 +76,7 @@ public class DatabaseHelper {
         }
     }
 
+    //get user repositories
     public Cursor getRepos(int id){
         SQLiteDatabase db = sqLiteOpenHelper.getReadableDatabase();
         if(db == null)
@@ -84,6 +87,7 @@ public class DatabaseHelper {
         return cur;
     }
 
+    //get user cursor by login
     public Cursor getUserWithLogin(String login){
         SQLiteDatabase db = sqLiteOpenHelper.getReadableDatabase();
         if(db == null)
@@ -94,6 +98,7 @@ public class DatabaseHelper {
         return cur;
     }
 
+    // get list of not-detailed user info to create SavedUsersList
     public List<SavedUserEntity> getUsers(){
         SQLiteDatabase db = sqLiteOpenHelper.getReadableDatabase();
         if(db == null)
@@ -133,8 +138,13 @@ public class DatabaseHelper {
         row.put(DataProvider.USER_NAME, user.getName());
         row.put(DataProvider.HTML_URL, user.getUrl());
         row.put(DataProvider.USER_FOLLOWING, user.getFollowing());
-        row.put(DataProvider.USER_IMAGE, DbBitmapUtility.getBytes(user.getLoadedBitmap().getCurrentImage()));
+
+        //bitmap -> byte[]
+        row.put(DataProvider.USER_IMAGE, DbBitmapUtility
+                .getBytes(user.getLoadedBitmap().getCurrentImage()));
+
         int id;
+
         if(getUserWithLogin(user.getLogin()).getCount() > 0){
             id = db.update(DataProvider.USER_TABLE, row,
                     " " + DataProvider.USER_LOGIN + " = " + "'" + user.getLogin() + "'", null);

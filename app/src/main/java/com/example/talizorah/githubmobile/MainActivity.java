@@ -9,11 +9,13 @@ import android.graphics.BitmapFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.talizorah.githubmobile.Database.DatabaseHelper;
 import com.example.talizorah.githubmobile.Model.BitmapDataObject;
@@ -50,16 +52,34 @@ public class MainActivity extends AppCompatActivity {
 
     @Bind(R.id.loading_bar)ProgressBar bar;
 
+    @Bind(R.id.username)
+    TextView usernameLabel;
+    @Bind(R.id.my_toolbar)
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.act_main);
         mActivity = this;
         userHandler = new UserHandler(this);
         githubService = GithubService.createGithubService();
         ButterKnife.bind(this);
-        bar.setVisibility(View.GONE);
+        bar.setVisibility(View.INVISIBLE);
+        setUpToolbar();
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    private void setUpToolbar(){
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
+        toolbar.setLogo(R.drawable.ic_toolbar);
+        usernameLabel.setText(R.string.app_name);
     }
 
     @Override
@@ -152,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onCompleted() {
-                        bar.setVisibility(View.GONE);
+                        bar.setVisibility(View.INVISIBLE);
                         startActivity(intent);
                     }
 
@@ -201,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
         alert.setPositiveButton(R.string.no_user_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                bar.setVisibility(View.GONE);
+                bar.setVisibility(View.INVISIBLE);
                 dialog.cancel();
             }
         });

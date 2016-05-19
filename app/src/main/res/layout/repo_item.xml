@@ -18,6 +18,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Medium Text"
             android:textSize="15sp"
+            android:textStyle="bold"
             android:id="@+id/repo_name"
             android:layout_weight="1" />
 

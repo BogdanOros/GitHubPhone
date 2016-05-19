@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="help_label">Введите название профиля ГитХаб</string>
+    <string name="app_name">GitHub Mobile</string>
+    <string name="help_label">Введите название профиля GitHub</string>
     <string name="search_button">Поиск</string>
 
     <string name="user_name">Имя: </string>
@@ -28,7 +29,9 @@
     <string name="db_open">Открыть!</string>
 
     <string name="saved_users">Сохраненные</string>
-    <string name="user_save">User saved!</string>
+    <string name="user_save">Пользователь сохранен!</string>
+    <string name="edit_hint">Логин</string>
+    <string name="repos_list_label">Список репозиториев</string>
     //Settings
     <string name="browser">Открыть в браузере</string>
     <string name="save">Сохранить</string>

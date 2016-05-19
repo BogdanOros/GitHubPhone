@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GitHubMobile</string>
+    <string name="app_name">GitHub Mobile</string>
     <string name="help_label">Enter the GitHub profile name</string>
     <string name="search_button">Search</string>
 
@@ -28,6 +28,8 @@
     <string name="db_open">Open!</string>
 
     <string name="user_save">User saved!</string>
+    <string name="edit_hint">Username</string>
+    <string name="repos_list_label">Repositories list</string>
 
     //Settings
     <string name="browser">Open in browser</string>

@@ -14,11 +14,14 @@ import java.util.List;
  * Created by talizorah on 16.18.5.
  */
 public class UserHandler {
+
     private Activity activity;
+
     public UserHandler(Activity activity){
         this.activity = activity;
     }
 
+    // creating User from Cursor
     public User getUserFromDatabase(Cursor cursor){
         User user = new User();
         try {
@@ -41,10 +44,14 @@ public class UserHandler {
                 try{
                     while(reposCursor.moveToNext()){
                         Repository repository = new Repository();
-                        repository.setName(reposCursor.getString(2));
-                        repository.setLanguage(reposCursor.getString(3));
-                        repository.setForks_count(reposCursor.getString(4));
-                        repository.setStargazers_count(reposCursor.getString(5));
+                        repository.setName(reposCursor.getString(
+                                reposCursor.getColumnIndex(DataProvider.REPO_NAME))); // 2 = RepoName
+                        repository.setLanguage(reposCursor.getString(
+                                reposCursor.getColumnIndex(DataProvider.REPO_LANG))); // 3 = RepoLanguage
+                        repository.setForks_count(reposCursor.getString(
+                                reposCursor.getColumnIndex(DataProvider.REPO_FORK))); // 4 = RepoForks
+                        repository.setStargazers_count(reposCursor.getString(
+                                reposCursor.getColumnIndex(DataProvider.REPO_STAR))); // 5 = RepoStars
                         list.add(repository);
                     }
                 }

@@ -85,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="16dp"
-                android:text="Repositories list"/>
+                android:text="@string/repos_list_label"/>
             <android.support.v7.widget.RecyclerView
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
