@@ -30,6 +30,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -101,6 +102,12 @@ public class UserActivity extends AppCompatActivity{
 
     private void saveIntoDb(){
         subscription = getUserSaveObservable()
+                .doOnNext(new Action1<User>() {
+                    @Override
+                    public void call(User user) {
+                        DatabaseHelper.getDatabaseHelper(mContext).add(user);
+                    }
+                })
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<User>() {
@@ -116,7 +123,6 @@ public class UserActivity extends AppCompatActivity{
 
                     @Override
                     public void onNext(User user) {
-                        DatabaseHelper.getDatabaseHelper(mContext).add(user);
                     }
                 });
     }

@@ -32,11 +32,14 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func0;
+import rx.functions.Func1;
 import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
@@ -49,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Bind(R.id.editText)
     EditText username;
+
+
 
     @Bind(R.id.loading_bar)ProgressBar bar;
 
@@ -119,8 +124,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private Observable<User> getDatabaseAccessObservable(Cursor cursor){
-        return Observable.just(userHandler.getUserFromDatabase(cursor));
+    private Observable<User> getDatabaseAccessObservable(final Cursor cursor){
+        return Observable.defer(new Func0<Observable<User>>() {
+            @Override
+            public Observable<User> call() {
+                return Observable.just(userHandler.getUserFromDatabase(cursor));
+            }
+        });
     }
 
     private Cursor checkSavedUser(){
@@ -215,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
+    // user not found
     private void noUserFindDialog(){
         AlertDialog.Builder alert = new AlertDialog.Builder(this, R.style.allert);
         alert.setTitle(R.string.no_user_tittle);
@@ -228,6 +239,7 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
+    // user found in database
     private void userDatabaseDialog(final Cursor cursor){
         AlertDialog.Builder alert = new AlertDialog.Builder(this, R.style.allert);
         alert.setTitle(R.string.db_tittle);
